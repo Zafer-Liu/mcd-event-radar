@@ -64,7 +64,7 @@ svg#map { width: 100%; height: auto; display: block; background: #FFFDF6;
 .frow button:hover { background: var(--gold); }
 .fstore { margin-top: 8px; display: none; }
 .fstore .schip { cursor: pointer; }
-.cardshead { display: flex; justify-content: space-between; align-items: center;
+.cardshead { display: flex; justify-content: space-between; align-items: center; gap: 8px;
   padding: 10px 16px 4px; font-size: 13px; color: var(--sub); }
 .cards { flex: 1; overflow-y: auto; padding: 6px 12px 12px; max-height: calc(100vh - 300px); min-height: 320px; }
 .card { background: #fff; border: 1px solid var(--cardline); border-left-width: 5px;
@@ -101,7 +101,18 @@ svg#map { width: 100%; height: auto; display: block; background: #FFFDF6;
 .mk.pulse .mkbody { animation: mpulse 1.1s ease; }
 @keyframes mpulse { 0% { transform: scale(1); } 30% { transform: scale(1.45); } 100% { transform: scale(1); } }
 .zlabel rect { rx: 12; }
-button:focus-visible, select:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+button:focus-visible, select:focus-visible, .mk:focus-visible, .tl:focus-visible, .icsbtn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.tlegend { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+.tl { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line);
+  background: #fff; border-radius: 999px; padding: 3px 9px; font-size: 11.5px;
+  color: var(--ink); cursor: pointer; transition: border-color .15s, background .15s, transform .12s; }
+.tl:hover { border-color: var(--red); transform: translateY(-1px); }
+.tl.on { border-color: var(--ink); background: #FFF6E3; font-weight: 700; }
+.tl i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+.icsbtn { border: 1px solid #E8D9BC; background: #fff; border-radius: 999px; padding: 4px 11px;
+  font-size: 12px; color: var(--ink); cursor: pointer;
+  transition: background .15s, border-color .15s; }
+.icsbtn:hover { background: var(--gold); border-color: #E9AB4E; }
 
 /* ---- 微交互元素改编自 Uiverse.io（MIT 许可，© 各原作者）----
    气泡提示 vinodjangid07/mighty-elephant-52 · 扫光填充 adamgiebl/curly-wombat-58
@@ -115,7 +126,8 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--red); outl
 #freset:hover::before { transform: translate(-50%, -50%) rotate(-90deg); width: 100%; }
 #freset:hover { border-color: #E9AB4E; }
 #freset:active { transform: translate(1px, 1px); }
-.mtooltip { position: absolute; z-index: 30; max-width: 240px; padding: 9px 12px;
+/* left/top 给初始值：未显示时不落在静态位置，避免小屏撑出横向滚动 */
+.mtooltip { position: absolute; left: 0; top: 0; z-index: 30; max-width: 240px; padding: 9px 12px;
   background: #fff; border: 1.5px solid var(--gold); border-radius: 12px;
   box-shadow: 0 8px 20px rgba(122, 82, 26, .16); opacity: 0; pointer-events: none;
   transform: translateX(-50%) translateY(5px); transition: opacity .18s, transform .18s; }
@@ -136,6 +148,35 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--red); outl
   .layout { flex-direction: column; }
   .panel { max-width: none; }
   .cards { max-height: 60vh; }
+}
+@media (max-width: 720px) {
+  .topbar { padding: 10px 14px; gap: 6px; }
+  .brand { font-size: 18px; }
+  .topmeta { font-size: 12px; }
+  .layout { padding: 10px; gap: 12px; }
+  .stats { gap: 6px; }
+  .schip { padding: 4px 10px; font-size: 12px; }
+  .dchips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 3px;
+    scrollbar-width: thin; }
+  .dchip { flex: 0 0 auto; }
+  .frow select { flex-basis: 100%; }
+  .cards { max-height: 54vh; min-height: 240px; }
+  .mtooltip { max-width: 190px; padding: 7px 10px; }
+  .mt-name { font-size: 12.5px; }
+  .pfoot { font-size: 11px; max-height: 132px; overflow-y: auto; }
+}
+/* 尊重系统「减少动态效果」设置：关闭装饰动画与位移反馈 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  .mk:hover .mkbody, .mk.sel .mkbody { transform: none; }
+  .dchip:hover, .dchip:active, .dchip.on:hover, .dchip.on:active { transform: none; }
+  .morebtn:hover { transform: none; border-bottom-width: 5px; }
+  .tl:hover { transform: none; }
+  .card:hover { transform: none; }
+  .mtooltip { transform: translateX(-50%); }
+  .mtooltip.below { transform: translateX(-50%); }
+  #freset::before { transition: none; }
 }
 `;
 
@@ -494,7 +535,8 @@ function init() {
   /* ---------- 门店标记（卡通麦当劳小屋） ---------- */
   function marker(s, dim) {
     var x = Math.round(s.mx), y = Math.round(s.my);
-    return '<g class="mk' + (dim ? ' dim' : '') + '" data-key="' + esc(s.key) + '" transform="translate(' + x + ',' + y + ')">'
+    return '<g class="mk' + (dim ? ' dim' : '') + '" data-key="' + esc(s.key) + '" transform="translate(' + x + ',' + y + ')"'
+      + ' role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(s.name) + '">'
       + '<g class="mkbody">'
       + '<ellipse cy="30" rx="21" ry="6" fill="rgba(90,60,20,.12)"/>'
       + '<rect x="-17" y="-4" width="34" height="30" rx="4" fill="#FFFFFF" stroke="#E7D8B8" stroke-width="1.5"/>'
@@ -519,6 +561,7 @@ function init() {
   /* ---------- 筛选与卡片 ---------- */
   var state = { date: 'all', activity: 'all', status: 'all', store: null, shown: 80 };
   var perStoreNow = {};   // 当前筛选下各门店场次数（悬停提示用）
+  var currentList = [];   // 当前筛选结果（导出日历用）
   var dates = [], dateSet = {};
   events.forEach(function (e) { if (!dateSet[e.startDate]) { dateSet[e.startDate] = 1; dates.push(e.startDate); } });
   dates.sort();
@@ -567,6 +610,7 @@ function init() {
         : a.title < b.title ? -1 : 1;
     });
     var html = '', n = Math.min(state.shown, list.length);
+    currentList = list;
     for (var i = 0; i < n; i++) html += cardHtml(list[i]);
     if (list.length > state.shown) html += '<button class="morebtn" id="morebtn">显示更多（还有 ' + (list.length - state.shown) + ' 场）</button>';
     if (!list.length) html = '<div class="empty">当前筛选条件下没有场次，试试放宽日期或活动类型。</div>';
@@ -589,6 +633,9 @@ function init() {
       if (num) num.textContent = cnt > 99 ? '99+' : String(cnt);
       g.classList.toggle('dim', cnt === 0);
       g.classList.toggle('sel', state.store === k);
+      var nm = storeIdx[k] != null ? storeList[storeIdx[k]].name : k;
+      g.setAttribute('aria-label', nm + '：当前筛选 ' + cnt + ' 场' + (cnt === 0 ? '，已置灰' : ''));
+      g.setAttribute('aria-pressed', state.store === k ? 'true' : 'false');
     });
     // 门店筛选提示条
     var fs = $('fstore');
@@ -602,6 +649,11 @@ function init() {
     document.querySelectorAll('.dchip').forEach(function (c) {
       c.classList.toggle('on', c.getAttribute('data-v') === state.date);
     });
+    document.querySelectorAll('.tl').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-v') === state.activity);
+    });
+    var ib = $('icsbtn');
+    if (ib) ib.textContent = list.length ? '📅 导出日历（' + list.length + '）' : '📅 导出日历';
     if (scrollTop) { var cw = $('cards'); cw.scrollTop = 0; }
   }
 
@@ -624,6 +676,28 @@ function init() {
   $('fstat').innerHTML = '<option value="all">全部状态</option><option value="open">可预约</option>'
     + '<option value="full">已满</option><option value="unknown">状态未核实</option>';
   $('fstat').onchange = function () { state.status = this.value; state.shown = 80; applyFilters(true); };
+
+  // 活动类型色标（颜色与卡片左边框一致，点击/回车可筛选）
+  var tlHtml = '<span class="tl on" data-v="all" role="button" tabindex="0">'
+    + '<i style="background:#BDB3A2"></i>全部活动类型</span>';
+  titles.forEach(function (t) {
+    var c = TAG_COLORS[hashStr(t) % TAG_COLORS.length];
+    tlHtml += '<span class="tl" data-v="' + esc(t) + '" role="button" tabindex="0">'
+      + '<i style="background:' + c + '"></i>' + esc(t) + '</span>';
+  });
+  $('tlegend').innerHTML = tlHtml;
+  document.querySelectorAll('.tl').forEach(function (b) {
+    function pick() {
+      state.activity = b.getAttribute('data-v');
+      state.shown = 80;
+      $('fact').value = state.activity;
+      applyFilters(true);
+    }
+    b.onclick = pick;
+    b.onkeydown = function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar') { ev.preventDefault(); pick(); }
+    };
+  });
   $('freset').onclick = function () {
     state = { date: 'all', activity: 'all', status: 'all', store: null, shown: 80 };
     $('fact').value = 'all'; $('fstat').value = 'all';
@@ -654,6 +728,83 @@ function init() {
     }
   });
 
+  /* ---------- 导出日历（.ics）：只导出当前筛选结果 ---------- */
+  // 注意：本段位于 CLIENT_JS 模板字符串内，源码里的反斜杠会被吞掉，
+  // 因此一律用字符码构造转义符，不写任何字面反斜杠。
+  var BS = String.fromCharCode(92), LF = String.fromCharCode(10), CR = String.fromCharCode(13);
+  var CRLF = CR + LF, BOM = String.fromCharCode(65279);
+  function icsEsc(s) {
+    var out = String(s == null ? '' : s);
+    out = out.split(CR).join('');
+    out = out.split(BS).join(BS + BS);
+    out = out.split(';').join(BS + ';');
+    out = out.split(',').join(BS + ',');
+    out = out.split(LF).join(BS + 'n');
+    return out;
+  }
+  function pad2(n) { var v = Number(n); return v < 10 ? '0' + v : String(v); }
+  function nextDay(d) {
+    var p = String(d).split('-');
+    return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]) + 86400000).toISOString().slice(0, 10);
+  }
+  function icsStamp() {
+    var d = new Date();
+    return d.getUTCFullYear() + pad2(d.getUTCMonth() + 1) + pad2(d.getUTCDate()) + 'T'
+      + pad2(d.getUTCHours()) + pad2(d.getUTCMinutes()) + pad2(d.getUTCSeconds()) + 'Z';
+  }
+  function buildIcs(list) {
+    var out = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//McEvent Radar//ZH', 'CALSCALE:GREGORIAN'];
+    var stamp = icsStamp(), allDay = 0;
+    list.forEach(function (e, i) {
+      var s = storeIdx[storeKey(e)] != null ? storeList[storeIdx[storeKey(e)]] : null;
+      // 分隔符用「非数字」匹配，不用空格类简写（模板字符串会吞掉反斜杠）
+      var m = /([0-9]{1,2}):([0-9]{2})[^0-9]*([0-9]{1,2}):([0-9]{2})/.exec(e.session || '');
+      var dStart, dEnd, timeNote = '';
+      if (m) {
+        dStart = 'DTSTART:' + e.startDate.replace(/-/g, '') + 'T' + pad2(m[1]) + m[2] + '00';
+        dEnd = 'DTEND:' + e.startDate.replace(/-/g, '') + 'T' + pad2(m[3]) + m[4] + '00';
+      } else {
+        allDay++;
+        dStart = 'DTSTART;VALUE=DATE:' + e.startDate.replace(/-/g, '');
+        dEnd = 'DTEND;VALUE=DATE:' + nextDay(e.startDate).replace(/-/g, '');
+        timeNote = '（官方未提供场次时间，已按全天事件创建）';
+      }
+      var p = parseDetail(e.detail);
+      var desc = ['场次：' + (e.session || '未提供') + timeNote,
+        p.left != null ? '剩余名额：' + p.left : '',
+        p.approx != null ? '费用：约 ¥' + p.approx + '（原始字段 ' + p.price + ' 分）'
+          : p.price != null ? '费用原始字段：' + p.price + '（单位待核实）' : '',
+        '门店：' + (s ? s.name : e.store),
+        '数据：麦当劳官方 MCP 实时查询，获取于 ' + fmtRetrieved(D.retrievedAt) + '；名额可能变化，以官方为准。'
+      ].filter(Boolean).join(LF);
+      out.push('BEGIN:VEVENT',
+        'UID:mcd-' + hashStr(e.title + e.store + e.startDate + (e.session || '')) + '-' + i + '@mcevent-radar',
+        'DTSTAMP:' + stamp, dStart, dEnd,
+        'SUMMARY:' + icsEsc(e.title + ' · ' + (s ? (s.shortName || s.name) : e.store)),
+        'LOCATION:' + icsEsc(s && s.address ? s.address : (s ? s.name : e.store)),
+        'DESCRIPTION:' + icsEsc(desc),
+        'END:VEVENT');
+    });
+    out.push('END:VCALENDAR');
+    return { text: out.join(CRLF), allDay: allDay };
+  }
+  var icsBtn = $('icsbtn');
+  if (icsBtn) icsBtn.onclick = function () {
+    if (!currentList.length) return;
+    var r = buildIcs(currentList);
+    var blob = new Blob([BOM + r.text], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    var datePart = (D.from || D.to) ? '_' + (D.from || '') + (D.to ? '至' + D.to : '') : '';
+    a.download = '麦麦活动_' + (D.city || '活动') + datePart + '.ics';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    this.textContent = '✅ 已导出 ' + currentList.length + ' 场';
+    this.title = r.allDay ? '其中 ' + r.allDay + ' 场未提供场次时间，已按全天事件创建' : '已导出到下载目录';
+    setTimeout(function () { applyFilters(false); }, 1600);
+  };
+
   /* ---------- 门店悬停提示（气泡样式改编自 Uiverse.io vinodjangid07，MIT） ---------- */
   var tipEl = $('mtooltip');
   var wrapEl = document.querySelector('.mapwrap');
@@ -680,6 +831,18 @@ function init() {
   svg.querySelectorAll('g.mk').forEach(function (g) {
     g.addEventListener('mouseenter', function () { showTip(g); });
     g.addEventListener('mouseleave', hideTip);
+    // 键盘可达：聚焦即出提示，回车/空格切换本店筛选
+    g.addEventListener('focus', function () { showTip(g); });
+    g.addEventListener('blur', hideTip);
+    g.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar') {
+        ev.preventDefault();
+        var k = g.getAttribute('data-key');
+        state.store = (state.store === k) ? null : k;
+        state.shown = 80;
+        applyFilters(true);
+      }
+    });
   });
   window.addEventListener('resize', hideTip);
 
@@ -760,8 +923,12 @@ function renderHtmlMap(data) {
     '<button id="freset"><span>重置</span></button>',
     '</div>',
     '<div class="fstore" id="fstore"></div>',
+    '<div class="tlegend" id="tlegend"></div>',
     '</div>',
-    '<div class="cardshead"><span id="count"></span><span>点击卡片可在地图上定位门店</span></div>',
+    '<div class="cardshead"><span id="count"></span>'
+    + '<span style="display:flex;align-items:center;gap:8px;">'
+    + '<button class="icsbtn" id="icsbtn" title="把当前筛选结果导出为 .ics 日历文件；场次时间未提供的按全天事件创建">📅 导出日历</button>'
+    + '<span>点击卡片可定位门店</span></span></div>',
     '<div class="cards" id="cards"></div>',
     '<div class="pfoot">' + escapeHtml(disclaimer.join(' ')) + '</div>',
     '</aside>',
