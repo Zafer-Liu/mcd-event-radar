@@ -48,9 +48,14 @@ svg#map { width: 100%; height: auto; display: block; background: #FFFDF6;
 .fbar { padding: 12px 14px 8px; border-bottom: 1px dashed var(--cardline); }
 .dchips { display: flex; gap: 6px; flex-wrap: wrap; }
 .dchip { border: 1px solid #E8D9BC; background: #fff; color: var(--ink); border-radius: 999px;
-  padding: 4px 12px; font-size: 12.5px; cursor: pointer; transition: all .15s; }
-.dchip:hover { border-color: var(--red); }
-.dchip.on { background: var(--red); border-color: var(--red); color: #fff; }
+  padding: 4px 12px; font-size: 12.5px; cursor: pointer;
+  transition: transform .12s, box-shadow .12s, border-color .15s, background .15s, color .15s; }
+.dchip:hover { border-color: var(--red); transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(122, 82, 26, .15); }
+.dchip:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(122, 82, 26, .12); }
+.dchip.on { background: var(--red); border-color: var(--red); color: #fff;
+  box-shadow: 2px 2px 0 var(--gold); }
+.dchip.on:hover, .dchip.on:active { transform: none; box-shadow: 2px 2px 0 var(--gold); }
 .frow { display: flex; gap: 8px; margin-top: 9px; flex-wrap: wrap; }
 .frow select { flex: 1; min-width: 120px; border: 1px solid #E8D9BC; border-radius: 10px;
   padding: 6px 8px; font-size: 13px; background: #fff; color: var(--ink); }
@@ -81,9 +86,11 @@ svg#map { width: 100%; height: auto; display: block; background: #FFFDF6;
 .c3 .p { color: var(--red); font-weight: 800; font-size: 14px; }
 .c3 .p i { font-style: normal; font-weight: 400; font-size: 10px; color: var(--sub); margin-left: 3px; }
 .c3 .p-na { color: var(--sub); font-weight: 400; font-size: 12px; }
-.morebtn { display: block; width: 100%; border: 1px dashed #E8D9BC; background: #FFFDF6;
-  border-radius: 12px; padding: 9px; font-size: 13px; color: var(--sub); cursor: pointer; }
-.morebtn:hover { color: var(--red); border-color: var(--red); }
+.morebtn { display: block; width: 100%; border: none; border-bottom: 5px solid #A61B11;
+  background: var(--red); color: #fff; font-weight: 700; border-radius: 12px;
+  padding: 10px; font-size: 13.5px; cursor: pointer;
+  box-shadow: 0 4px 10px rgba(218, 41, 28, .22); transition: transform .1s, border-bottom-width .1s; }
+.morebtn:hover { transform: translateY(4px); border-bottom-width: 1px; }
 .empty { text-align: center; color: var(--sub); padding: 50px 10px; font-size: 14px; }
 .pfoot { padding: 10px 16px 14px; border-top: 1px dashed var(--cardline);
   font-size: 11.5px; color: var(--sub); line-height: 1.7; }
@@ -94,6 +101,37 @@ svg#map { width: 100%; height: auto; display: block; background: #FFFDF6;
 .mk.pulse .mkbody { animation: mpulse 1.1s ease; }
 @keyframes mpulse { 0% { transform: scale(1); } 30% { transform: scale(1.45); } 100% { transform: scale(1); } }
 .zlabel rect { rx: 12; }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* ---- 微交互元素改编自 Uiverse.io（MIT 许可，© 各原作者）----
+   气泡提示 vinodjangid07/mighty-elephant-52 · 扫光填充 adamgiebl/curly-wombat-58
+   厚底按压 adamgiebl/big-moose-23 · 硬影按压 andrew-demchenk0/afraid-squid-51 */
+#freset { position: relative; overflow: hidden; background: #fff; border: 1.5px solid #E8D9BC;
+  font-weight: 700; }
+#freset span { position: relative; z-index: 2; }
+#freset::before { content: ''; position: absolute; top: 50%; left: 50%; width: 9%; height: 500%;
+  background: var(--gold); transform: translate(-50%, -50%) rotate(-60deg);
+  transition: transform .3s, width .3s; z-index: 1; }
+#freset:hover::before { transform: translate(-50%, -50%) rotate(-90deg); width: 100%; }
+#freset:hover { border-color: #E9AB4E; }
+#freset:active { transform: translate(1px, 1px); }
+.mtooltip { position: absolute; z-index: 30; max-width: 240px; padding: 9px 12px;
+  background: #fff; border: 1.5px solid var(--gold); border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(122, 82, 26, .16); opacity: 0; pointer-events: none;
+  transform: translateX(-50%) translateY(5px); transition: opacity .18s, transform .18s; }
+.mtooltip.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.mtooltip::before { content: ''; position: absolute; left: 50%; bottom: -5.5px; width: 10px; height: 10px;
+  background: #fff; border-right: 1.5px solid var(--gold); border-bottom: 1.5px solid var(--gold);
+  transform: translateX(-50%) rotate(45deg); }
+.mtooltip.below { transform: translateX(-50%) translateY(-5px); }
+.mtooltip.below.show { transform: translateX(-50%) translateY(0); }
+.mtooltip.below::before { bottom: auto; top: -5.5px; transform: translateX(-50%) rotate(225deg); }
+.mt-name { font-size: 13.5px; font-weight: 800; color: var(--ink); }
+.mt-addr { font-size: 11px; color: var(--sub); margin-top: 2px; line-height: 1.5; }
+.mt-cnt { font-size: 12px; margin-top: 5px; color: var(--ink); }
+.mt-cnt b { color: var(--red); font-size: 14px; }
+.mt-hint { font-size: 10.5px; color: #B09555; margin-top: 4px;
+  border-top: 1px dashed var(--line); padding-top: 4px; }
 @media (max-width: 980px) {
   .layout { flex-direction: column; }
   .panel { max-width: none; }
@@ -457,7 +495,6 @@ function init() {
   function marker(s, dim) {
     var x = Math.round(s.mx), y = Math.round(s.my);
     return '<g class="mk' + (dim ? ' dim' : '') + '" data-key="' + esc(s.key) + '" transform="translate(' + x + ',' + y + ')">'
-      + '<title>' + esc(s.name) + (s.address ? '（' + esc(s.address) + '）' : '') + '</title>'
       + '<g class="mkbody">'
       + '<ellipse cy="30" rx="21" ry="6" fill="rgba(90,60,20,.12)"/>'
       + '<rect x="-17" y="-4" width="34" height="30" rx="4" fill="#FFFFFF" stroke="#E7D8B8" stroke-width="1.5"/>'
@@ -481,6 +518,7 @@ function init() {
 
   /* ---------- 筛选与卡片 ---------- */
   var state = { date: 'all', activity: 'all', status: 'all', store: null, shown: 80 };
+  var perStoreNow = {};   // 当前筛选下各门店场次数（悬停提示用）
   var dates = [], dateSet = {};
   events.forEach(function (e) { if (!dateSet[e.startDate]) { dateSet[e.startDate] = 1; dates.push(e.startDate); } });
   dates.sort();
@@ -522,6 +560,7 @@ function init() {
   }
 
   function applyFilters(scrollTop) {
+    hideTip();
     var list = filtered().slice().sort(function (a, b) {
       return a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1
         : (a.session || '') < (b.session || '') ? -1 : (a.session || '') > (b.session || '') ? 1
@@ -542,6 +581,7 @@ function init() {
       var k = storeKey(e);
       perStore[k] = (perStore[k] || 0) + 1;
     });
+    perStoreNow = perStore;
     svg.querySelectorAll('g.mk').forEach(function (g) {
       var k = g.getAttribute('data-key');
       var num = g.querySelector('.bubn');
@@ -614,6 +654,35 @@ function init() {
     }
   });
 
+  /* ---------- 门店悬停提示（气泡样式改编自 Uiverse.io vinodjangid07，MIT） ---------- */
+  var tipEl = $('mtooltip');
+  var wrapEl = document.querySelector('.mapwrap');
+  function hideTip() { tipEl.classList.remove('show'); }
+  function showTip(g) {
+    var k = g.getAttribute('data-key');
+    var st = storeIdx[k] != null ? storeList[storeIdx[k]] : null;
+    if (!st) return;
+    var cnt = perStoreNow[k] || 0;
+    tipEl.innerHTML = '<div class="mt-name">🍟 ' + esc(st.shortName || st.name) + '</div>'
+      + (st.address ? '<div class="mt-addr">' + esc(st.address) + '</div>' : '')
+      + '<div class="mt-cnt">' + (cnt > 0 ? '当前筛选 <b>' + cnt + '</b> 场活动' : '当前筛选下暂无场次') + '</div>'
+      + '<div class="mt-hint">' + (state.store === k ? '再次点击取消本店筛选' : '点击可只看这家店') + '</div>';
+    var rect = g.getBoundingClientRect(), wr = wrapEl.getBoundingClientRect();
+    var x = rect.left + rect.width / 2 - wr.left;
+    var below = (rect.top - wr.top) < 100;
+    var tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+    var left = Math.min(Math.max(x, tw / 2 + 4), Math.max(wr.width - tw / 2 - 4, tw / 2 + 4));
+    tipEl.classList.toggle('below', below);
+    tipEl.style.left = left + 'px';
+    tipEl.style.top = (below ? (rect.bottom - wr.top + 12) : (rect.top - wr.top - th - 12)) + 'px';
+    tipEl.classList.add('show');
+  }
+  svg.querySelectorAll('g.mk').forEach(function (g) {
+    g.addEventListener('mouseenter', function () { showTip(g); });
+    g.addEventListener('mouseleave', hideTip);
+  });
+  window.addEventListener('resize', hideTip);
+
   // 顶部统计
   var openCnt = events.filter(function (e) { return e.bookingStatus === 'open'; }).length;
   $('st-total').innerHTML = '<b>' + events.length + '</b> 场次';
@@ -675,11 +744,11 @@ function renderHtmlMap(data) {
     '<span class="schip" id="st-kind"></span>',
     '<span class="schip" id="st-time"></span>',
     '</div>',
-    '<div class="mapwrap"><svg id="map" viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg"></svg></div>',
+    '<div class="mapwrap"><svg id="map" viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg"></svg><div class="mtooltip" id="mtooltip"></div></div>',
     '<div class="legend">',
     '<span>🏠 门店小屋（位置=官方经纬度投影）</span>',
     '<span>🟡 气泡=当前筛选下场次数</span>',
-    '<span>🖱️ 点击门店筛选卡片 / 点击卡片定位门店</span>',
+    '<span>🖱️ 悬停看门店信息 · 点击门店筛选 / 点击卡片定位</span>',
     '</div>',
     '</section>',
     '<aside class="panel">',
@@ -688,7 +757,7 @@ function renderHtmlMap(data) {
     '<div class="frow">',
     '<select id="fact"></select>',
     '<select id="fstat"></select>',
-    '<button id="freset">重置</button>',
+    '<button id="freset"><span>重置</span></button>',
     '</div>',
     '<div class="fstore" id="fstore"></div>',
     '</div>',
