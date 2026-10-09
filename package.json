@@ -1,0 +1,16 @@
+{
+  "name": "mcd-event-radar",
+  "version": "0.3.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "node skill/mcd-event-radar/scripts/setup-connector.mjs",
+    "check": "node skill/mcd-event-radar/scripts/check-connector.mjs",
+    "locate": "node skill/mcd-event-radar/scripts/locate.mjs",
+    "live": "node skill/mcd-event-radar/scripts/live.mjs",
+    "radar": "node skill/mcd-event-radar/scripts/radar.mjs"
+  }
+}

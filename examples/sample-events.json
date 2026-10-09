@@ -1,0 +1,62 @@
+{
+  "note": "以下全是虚构演示数据，不代表麦当劳实时活动、库存或价格。stores 为门店元数据（官方经纬度与地址），供 HTML 地图定位使用。",
+  "retrievedAt": "2026-10-09T15:00:00+08:00",
+  "cityGeo": { "latitude": 31.2304, "longitude": 121.4737 },
+  "stores": {
+    "demo-001": {
+      "name": "示例门店 A",
+      "shortName": "门店 A",
+      "address": "示例大街88号",
+      "latitude": 31.2304,
+      "longitude": 121.4737
+    },
+    "demo-002": {
+      "name": "示例门店 B（无坐标演示）",
+      "shortName": "门店 B",
+      "address": "示例路1号",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  "events": [
+    {
+      "id": "demo-party-1",
+      "title": "示例主题体验活动",
+      "kind": "theme",
+      "city": "上海",
+      "store": "示例门店 A",
+      "storeCode": "demo-001",
+      "startDate": "2026-10-17",
+      "session": "14:00—15:00",
+      "bookingStatus": "open",
+      "priceYuan": null,
+      "detail": "剩余名额：8；原始价格字段：4500（单位分，经商城价 45 元交叉核实，约 ¥45）。仅用于演示筛选和排序，绝非真实场次。",
+      "sourceTool": "query-party-store-session"
+    },
+    {
+      "id": "demo-party-2",
+      "title": "示例主题体验活动",
+      "kind": "theme",
+      "city": "上海",
+      "store": "示例门店 B（无坐标演示）",
+      "storeCode": "demo-002",
+      "startDate": "2026-10-18",
+      "session": "10:00—11:30",
+      "bookingStatus": "full",
+      "priceYuan": null,
+      "detail": "剩余名额：0；原始价格字段：4500（单位待核实）。仅用于演示，绝非真实场次。",
+      "sourceTool": "query-party-store-session"
+    },
+    {
+      "id": "demo-calendar-1",
+      "title": "示例活动日历条目",
+      "kind": "calendar",
+      "city": "上海",
+      "startDate": "2026-10-18",
+      "endDate": "2026-10-24",
+      "bookingStatus": "unknown",
+      "detail": "只有活动线索，没有门店及预约名额信息。",
+      "sourceTool": "campaign-calendar"
+    }
+  ]
+}
