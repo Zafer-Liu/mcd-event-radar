@@ -46,24 +46,30 @@
 
 ## 🚀 三步开吃
 
-### 第 1 步 · 复制这一句，装好 Skill
+### 第 1 步 · 把这句话发给 WorkBuddy
 
-**Windows**（开始菜单搜 PowerShell，打开，粘贴，回车）：
+不用打开任何命令行——WorkBuddy 自己就会干活。复制下面这句，粘贴进 WorkBuddy 对话框，回车：
 
-```powershell
-irm https://raw.githubusercontent.com/Zafer-Liu/mcd-event-radar/main/install.ps1 | iex
+```text
+帮我安装这个技能：https://github.com/Zafer-Liu/mcd-event-radar
+把仓库里 skill/mcd-event-radar 文件夹复制到用户级技能目录（~/.workbuddy/skills/），
+确认 SKILL.md 存在，装完提醒我重开一轮会话
 ```
 
-**macOS / Linux**（终端粘贴回车）：
+它会自己下载、安装、验收。装好后**新开一轮会话**，进入第 2 步。
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/Zafer-Liu/mcd-event-radar/main/install.sh | bash
-```
-
-> 这句话做了什么：只是把 Skill 文件放进 WorkBuddy 的技能文件夹（`~/.workbuddy/skills`），
-> 不改动其他任何东西。重复运行 = 更新；想卸载 = 删掉那个文件夹。
-> 不想用命令行？下载本仓库的 `dist/mcd-event-radar-skill.zip`，
-> 在 WorkBuddy「技能 → 添加技能 → 上传技能」里导入，效果一样。
+> **不想用对话装？** 两个替代方案，效果一样：
+> - **图形界面**：下载本仓库的 `dist/mcd-event-radar-skill.zip`，
+>   在 WorkBuddy「技能 → 添加技能 → 上传技能」里导入。
+> - **命令行**（适合熟手，重复运行 = 更新；卸载 = 删掉 `~/.workbuddy/skills/mcd-event-radar` 文件夹）：
+>
+>   ```powershell
+>   irm https://raw.githubusercontent.com/Zafer-Liu/mcd-event-radar/main/install.ps1 | iex
+>   ```
+>
+>   ```bash
+>   curl -fsSL https://raw.githubusercontent.com/Zafer-Liu/mcd-event-radar/main/install.sh | bash
+>   ```
 
 ### 第 2 步 · 对它说一句话
 
@@ -182,7 +188,7 @@ Remove-Item Env:\MCD_MCP_TOKEN
 
 ```
 mcd-event-radar/
-├── install.ps1 / install.sh      # 一句话安装脚本
+├── install.ps1 / install.sh      # 命令行安装脚本（备选路径，见第 1 步）
 ├── skill/mcd-event-radar/        # Skill 源码（SKILL.md + 6 个零依赖脚本）
 ├── dist/mcd-event-radar-skill.zip # 可直接导入 WorkBuddy 的 Skill 包
 ├── examples/sample-events.json   # 虚构演示数据（离线体验用，已标注）

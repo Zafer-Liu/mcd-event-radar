@@ -1,7 +1,8 @@
-# 麦麦活动雷达 · 一句话安装脚本（Windows）
+﻿# 麦麦活动雷达 · 一句话安装脚本（Windows）
 # 作用：把 Skill 文件放进 WorkBuddy 的用户级技能目录，不改其他任何文件。
 # 重复运行 = 覆盖更新；卸载 = 删除 %USERPROFILE%\.workbuddy\skills\mcd-event-radar 文件夹。
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'  # 关掉下载进度条：更快、更清爽
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $repo      = 'Zafer-Liu/mcd-event-radar'
