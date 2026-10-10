@@ -47,6 +47,21 @@
 
 ---
 
+## 🎬 演示视频（3 分 52 秒 · 完整跑一遍）
+
+[![麦麦活动雷达演示视频](images/video-poster.jpg)](https://github.com/Zafer-Liu/mcd-event-radar/releases/download/demo-video/mcd-event-radar-demo.mp4)
+
+> ▶ **[点击观看 / 下载视频（13.4 MB · 1080p）](https://github.com/Zafer-Liu/mcd-event-radar/releases/download/demo-video/mcd-event-radar-demo.mp4)**
+> · 讨论见 [Issue #1](https://github.com/Zafer-Liu/mcd-event-radar/issues/1)
+>
+> GitHub 不支持在线播放视频，链接会**下载到本机**后用播放器观看；不想下载就先看
+> [在线演示地图](https://app-ezf35mw5oq9t.miaoda.online/map)，浏览器里直接点。
+
+视频里你能看到：一句话提问 → 城市确认 → 官方 MCP 实时扫描 → 卡通活动地图生成
+→ 点日期/活动类型筛选 → 导出 `.ics` 日历，全程无剪辑、无假数据。
+
+---
+
 ## 🚀 三步开吃
 
 > **想先看效果？** 打开[在线演示地图](https://app-ezf35mw5oq9t.miaoda.online/map)：不用安装、不用 Token，在浏览器里直接点门店、筛日期、导出日历。
@@ -202,7 +217,7 @@ mcd-event-radar/
 ├── skill/mcd-event-radar/        # Skill 源码（SKILL.md + 6 个零依赖脚本）
 ├── dist/mcd-event-radar-skill.zip # 可直接导入 WorkBuddy 的 Skill 包
 ├── examples/sample-events.json   # 虚构演示数据（离线体验用，已标注）
-└── images/map-preview.png        # 北京实测截图
+└── images/                       # 北京实测截图 + 演示视频封面
 ```
 
 ## 参赛材料
@@ -211,6 +226,7 @@ mcd-event-radar/
 | --- | --- |
 | 项目介绍/安装/示例/目标用户 | 本 README |
 | 介绍主页 + 在线演示地图 | [app-ezf35mw5oq9t.miaoda.online](https://app-ezf35mw5oq9t.miaoda.online)（介绍页 · [演示地图](https://app-ezf35mw5oq9t.miaoda.online/map)） |
+| 作品演示视频（3 分 52 秒） | [Issue #1](https://github.com/Zafer-Liu/mcd-event-radar/issues/1) · [下载观看（13.4 MB）](https://github.com/Zafer-Liu/mcd-event-radar/releases/download/demo-video/mcd-event-radar-demo.mp4) |
 | 参赛声明（官方原文未改动） | [CONTEST_DECLARATION.md](CONTEST_DECLARATION.md) |
 | MCP 接入说明 | [MCP_INTEGRATION.md](MCP_INTEGRATION.md) |
 | 脱敏 MCP 配置示例 | [mcp-config.example.json](mcp-config.example.json) |
