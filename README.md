@@ -15,6 +15,9 @@
 [![Skill](https://img.shields.io/badge/WorkBuddy-Skill-FFC72C.svg)](skill/mcd-event-radar/SKILL.md)
 [![Live Tested](https://img.shields.io/badge/realtime--verified-620%20sessions%20%C2%B7%20BJ-brightgreen.svg)](MCP_INTEGRATION.md#在线验证记录2026-10-09真实-token)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/live--demo-online-blueviolet.svg)](https://app-ezf35mw5oq9t.miaoda.online/map)
+
+**🌐 [项目介绍主页](https://app-ezf35mw5oq9t.miaoda.online) · [在线演示地图（免安装，浏览器直接玩）](https://app-ezf35mw5oq9t.miaoda.online/map)**
 
 *麦当劳程序员创意开发大赛参赛作品 · 基于麦当劳 MCP 的 Agent Skill · 全程使用 WorkBuddy 开发*
 
@@ -45,6 +48,10 @@
 ---
 
 ## 🚀 三步开吃
+
+> **想先看效果？** 打开[在线演示地图](https://app-ezf35mw5oq9t.miaoda.online/map)：不用安装、不用 Token，在浏览器里直接点门店、筛日期、导出日历。
+> 演示站的活动与场次为**虚构数据**（门店相对位置仍是真实经纬度投影），页面本身已明确标注；
+> 真实数据请按下面三步接入自己的 Token。
 
 ### 第 1 步 · 把这句话发给 WorkBuddy
 
@@ -203,6 +210,7 @@ mcd-event-radar/
 | 要求 | 文件 |
 | --- | --- |
 | 项目介绍/安装/示例/目标用户 | 本 README |
+| 介绍主页 + 在线演示地图 | [app-ezf35mw5oq9t.miaoda.online](https://app-ezf35mw5oq9t.miaoda.online)（介绍页 · [演示地图](https://app-ezf35mw5oq9t.miaoda.online/map)） |
 | 参赛声明（官方原文未改动） | [CONTEST_DECLARATION.md](CONTEST_DECLARATION.md) |
 | MCP 接入说明 | [MCP_INTEGRATION.md](MCP_INTEGRATION.md) |
 | 脱敏 MCP 配置示例 | [mcp-config.example.json](mcp-config.example.json) |
